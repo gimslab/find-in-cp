@@ -1,11 +1,19 @@
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
-	console.debug("chrome.tabs.onUpdated.listener "+tab.url);
+chrome.runtime.onInstalled.addListener(function() {  
+
+  chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
+
+    chrome.declarativeContent.onPageChanged.addRules([{
+        
+        conditions: [
+          new chrome.declarativeContent.PageStateMatcher({
+            pageUrl: { urlContains: 'auction.co.kr' },
+          })
+        ],
+        actions: [ new chrome.declarativeContent.ShowPageAction() ]}]);
+  });
 });
 
-chrome.browserAction.onClicked.addListener(function(tab){
 
-	//chrome.downloads.setShelfEnabled(false);
-	//chrome.downloads.setShelfEnabled(true);
-
+chrome.pageAction.onClicked.addListener(function(tab) {  
+  chrome.tabs.executeScript(null, {file: "content.js"});
 });
-
